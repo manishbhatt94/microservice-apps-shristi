@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: eureka-service-registry-01
+
+server:
+    port: 8761 # Eureka-Server expects the port to be this exact value, i.e. 8761
+
+eureka:
+    client:
+        # Don't Self-Register:
+        # Don't register this service - as this app is the Service Registry Server itself
+        register-with-eureka: false
+        # Don't Fetch Registry: This app itself holds the registry
+        fetch-registry: false
