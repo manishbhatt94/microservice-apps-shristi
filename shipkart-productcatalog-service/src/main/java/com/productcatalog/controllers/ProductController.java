@@ -24,6 +24,7 @@ import com.productcatalog.model.enums.Delivery;
 import com.productcatalog.model.enums.OfferType;
 import com.productcatalog.model.enums.Payment;
 import com.productcatalog.service.IProductService;
+import com.productcatalog.web.ICourses;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,8 @@ public class ProductController {
 
 	private final IProductService productService;
 
+	private final ICourses courses;
+
 	@Value("${message}")
 	private String message;
 
@@ -41,6 +44,12 @@ public class ProductController {
 	@GetMapping("/show-message")
 	public String showMessage() {
 		return message;
+	}
+
+	// http://localhost:8081/product-api/v1/show-courses
+	@GetMapping("/show-courses")
+	public List<String> showCourses() {
+		return courses.getCourses();
 	}
 
 	// POST http://localhost:8081/product-api/v1/products
