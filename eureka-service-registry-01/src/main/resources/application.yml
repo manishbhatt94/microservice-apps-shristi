@@ -1,6 +1,6 @@
 spring:
     application:
-        name: eureka-service-registry-01
+        name: eureka-registry
 
 server:
     port: 8761 # Eureka-Server expects the port to be this exact value, i.e. 8761
