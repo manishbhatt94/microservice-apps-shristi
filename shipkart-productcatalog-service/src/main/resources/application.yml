@@ -12,6 +12,13 @@
 spring:
     application:
         name: product-catalog
+    config:
+        import:
+            - configserver:http://localhost:8888
+    profiles:
+        default: default
+        active:
+            - dev
 
 server:
     port: 8082

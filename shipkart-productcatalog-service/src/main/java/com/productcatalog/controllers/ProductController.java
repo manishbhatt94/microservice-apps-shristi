@@ -3,6 +3,7 @@ package com.productcatalog.controllers;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -32,6 +33,15 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
 	private final IProductService productService;
+
+	@Value("${message}")
+	private String message;
+
+	// http://localhost:8081/product-api/v1/show-message
+	@GetMapping("/show-message")
+	public String showMessage() {
+		return message;
+	}
 
 	// POST http://localhost:8081/product-api/v1/products
 	@PostMapping("/products")
