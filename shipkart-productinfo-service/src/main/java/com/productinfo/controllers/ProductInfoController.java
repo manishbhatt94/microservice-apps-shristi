@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/productinfo-api/v1")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductInfoController {
 
 	private final IProductService productService;
 
