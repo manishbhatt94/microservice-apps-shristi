@@ -1,0 +1,4 @@
+# shipkart-productinfo-service
+spring:
+    application:
+        name: product-info
