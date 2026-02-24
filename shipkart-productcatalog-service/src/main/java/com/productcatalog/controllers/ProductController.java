@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,6 +29,10 @@ import com.productcatalog.web.ICourses;
 
 import lombok.RequiredArgsConstructor;
 
+// Beans annotated with RefreshScope are lazily refreshed when we hit the actuator refresh endpoint
+// i.e. POST /actuator/refresh
+// See: https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/application-context-services.html#refresh-scope
+@RefreshScope
 @RequiredArgsConstructor
 @RequestMapping("/product-api/v1")
 @RestController
