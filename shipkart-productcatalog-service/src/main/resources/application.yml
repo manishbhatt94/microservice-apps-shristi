@@ -26,6 +26,7 @@ server:
 management:
     endpoints:
         web:
+            base-path: /custom-actuator-path
             exposure:
                 include:
                     - "*"
