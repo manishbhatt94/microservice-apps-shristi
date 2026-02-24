@@ -2,7 +2,11 @@ package com.productinfo.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import com.productinfo.exception.ProductNotFoundException;
 import com.productinfo.model.Product;
@@ -14,22 +18,41 @@ import com.productinfo.service.IProductService;
 @Service
 public class ProductServiceImpl implements IProductService {
 
+	@Autowired
+	private RestClient restClient;
+
+	private String BASE_URI = "http://product-catalog/product-api/v1";
+
 	@Override
 	public Product getById(int productId) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		return restClient
+				.get()
+				.uri(BASE_URI.concat("/products/productId/{productId}"), productId)
+				.retrieve()
+				.body(Product.class);
 	}
 
 	@Override
 	public List<Product> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		return restClient
+				.get()
+				.uri(BASE_URI.concat("/products"))
+				.retrieve()
+				.body(bodyType);
 	}
 
 	@Override
 	public List<Product> getByCategory(String category) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/category?categoryname={category}"), category)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 	@Override
