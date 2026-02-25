@@ -2,6 +2,8 @@ package com.productinfo.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class Category {
 
 	private String categoryName;
 
+	@JsonIgnore
 	private List<Product> products;
 
 }
