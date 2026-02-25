@@ -8,7 +8,7 @@ import com.productinfo.model.enums.Delivery;
 import com.productinfo.model.enums.OfferType;
 import com.productinfo.model.enums.Payment;
 
-public interface IProductService {
+public interface IProductInfoService {
 
 	Product getById(int productId) throws ProductNotFoundException;
 

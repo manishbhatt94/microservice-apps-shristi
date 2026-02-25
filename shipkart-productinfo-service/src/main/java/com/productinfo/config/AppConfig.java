@@ -9,8 +9,7 @@ public class AppConfig {
 
 	@Bean
 	RestClient restClient() {
-		RestClient.Builder builder = RestClient.builder();
-		return builder.build();
+		return RestClient.builder().build();
 	}
 
 }

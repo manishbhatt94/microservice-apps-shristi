@@ -13,15 +13,16 @@ import com.productinfo.model.Product;
 import com.productinfo.model.enums.Delivery;
 import com.productinfo.model.enums.OfferType;
 import com.productinfo.model.enums.Payment;
-import com.productinfo.service.IProductService;
+import com.productinfo.service.IProductInfoService;
 
 @Service
-public class ProductServiceImpl implements IProductService {
+public class ProductInfoServiceImpl implements IProductInfoService {
 
 	@Autowired
 	private RestClient restClient;
 
-	private String BASE_URI = "http://product-catalog/product-api/v1";
+	private String BASE_URI = "http://product-catalog/catalog-service/v1";
+//	private String BASE_URI = "http://localhost:8081/catalog-service/v1";
 
 	@Override
 	public Product getById(int productId) throws ProductNotFoundException {
@@ -57,32 +58,62 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> getByBrandAndPayType(String brand, Payment paymentType) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/brand/{brand}/payment/{payment}"), brand, paymentType)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 	@Override
 	public List<Product> getByColor(String color) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/color/{color}"), color)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 	@Override
 	public List<Product> getByCategoryAndDelivery(String category, Delivery delivery) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/category/{category}/delivery/{delivery}"), category, delivery)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 	@Override
 	public List<Product> getByNameContains(String name) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/name/{name}"), name)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 	@Override
 	public List<Product> getByNameAndOfferType(String name, OfferType offerType) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
+		};
+		ResponseEntity<List<Product>> response = restClient
+				.get()
+				.uri(BASE_URI.concat("/products/name/{name}/offer/{offer}"), name, offerType)
+				.retrieve()
+				.toEntity(bodyType);
+		return response.getBody();
 	}
 
 }
