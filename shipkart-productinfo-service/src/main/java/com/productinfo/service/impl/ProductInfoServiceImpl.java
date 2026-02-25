@@ -2,7 +2,7 @@ package com.productinfo.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,20 @@ import com.productinfo.service.IProductInfoService;
 @Service
 public class ProductInfoServiceImpl implements IProductInfoService {
 
-	@Autowired
-	private RestClient restClient;
+	private final RestClient restClient;
 
-	private String BASE_URI = "http://product-catalog/catalog-service/v1";
-//	private String BASE_URI = "http://localhost:8081/catalog-service/v1";
+	// Use @Qualifier to specify the LoadBalanced version
+	public ProductInfoServiceImpl(@Qualifier("loadBalancedRestClientBuilder") RestClient.Builder builder) {
+		// Now 'builder' is the one with the LoadBalancer interceptor.
+		// The service name 'product-catalog' is used as the base URL.
+		this.restClient = builder.baseUrl("http://product-catalog/catalog-service/v1").build();
+	}
 
 	@Override
 	public Product getById(int productId) throws ProductNotFoundException {
 		return restClient
 				.get()
-				.uri(BASE_URI.concat("/products/productId/{productId}"), productId)
+				.uri("/products/productId/{productId}", productId)
 				.retrieve()
 				.body(Product.class);
 	}
@@ -39,7 +42,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		return restClient
 				.get()
-				.uri(BASE_URI.concat("/products"))
+				.uri("/products")
 				.retrieve()
 				.body(bodyType);
 	}
@@ -50,7 +53,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/category?categoryname={category}"), category)
+				.uri("/products/category?categoryname={category}", category)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
@@ -62,7 +65,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/brand/{brand}/payment/{payment}"), brand, paymentType)
+				.uri("/products/brand/{brand}/payment/{payment}", brand, paymentType)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
@@ -74,7 +77,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/color/{color}"), color)
+				.uri("/products/color/{color}", color)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
@@ -86,7 +89,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/category/{category}/delivery/{delivery}"), category, delivery)
+				.uri("/products/category/{category}/delivery/{delivery}", category, delivery)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
@@ -98,7 +101,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/name/{name}"), name)
+				.uri("/products/name/{name}", name)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
@@ -110,7 +113,7 @@ public class ProductInfoServiceImpl implements IProductInfoService {
 		};
 		ResponseEntity<List<Product>> response = restClient
 				.get()
-				.uri(BASE_URI.concat("/products/name/{name}/offer/{offer}"), name, offerType)
+				.uri("/products/name/{name}/offer/{offer}", name, offerType)
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
