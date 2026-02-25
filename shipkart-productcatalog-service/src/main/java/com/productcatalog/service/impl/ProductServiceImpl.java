@@ -58,7 +58,8 @@ public class ProductServiceImpl implements IProductService {
 	public void updateProductVerbose(ProductDto productDto) {
 		// Step 1: Fetch existing product (with all associations)
 		Integer dtoProductId = productDto.getProductId();
-		Product existingProduct = productRepository.findById(dtoProductId)
+		Product existingProduct = productRepository
+				.findById(dtoProductId)
 				.orElseThrow(() -> new ProductNotFoundException(
 						"Product not found: Product with ID " + dtoProductId + " not found"));
 
@@ -75,7 +76,10 @@ public class ProductServiceImpl implements IProductService {
 
 		// Step 5: Handle Categories (ManyToMany)
 		if (productDto.getCategories() != null) {
-			List<Integer> categoryIds = productDto.getCategories().stream().map(CategoryDto::getCategoryId)
+			List<Integer> categoryIds = productDto
+					.getCategories()
+					.stream()
+					.map(CategoryDto::getCategoryId)
 					.collect(Collectors.toList());
 
 			List<Category> categories = categoryRepository.findAllById(categoryIds);
@@ -92,8 +96,10 @@ public class ProductServiceImpl implements IProductService {
 			Integer dtoBrandId = productDto.getBrand().getBrandId();
 			Integer existingBrandId = existingProduct.getBrand().getBrandId();
 			if (!dtoBrandId.equals(existingBrandId)) { // if a different brandId has been provided in the request
-				Brand brand = brandRepository.findById(dtoBrandId).orElseThrow(() -> new BrandNotFoundException(
-						"Brand not found: Brand with ID " + dtoBrandId + " not found"));
+				Brand brand = brandRepository
+						.findById(dtoBrandId)
+						.orElseThrow(() -> new BrandNotFoundException(
+								"Brand not found: Brand with ID " + dtoBrandId + " not found"));
 				existingProduct.setBrand(brand);
 			}
 		}
@@ -148,7 +154,9 @@ public class ProductServiceImpl implements IProductService {
 		}
 
 		// Build a map of existing offers by ID
-		Map<Integer, Offer> existingOffersMap = existingProduct.getOffers().stream()
+		Map<Integer, Offer> existingOffersMap = existingProduct
+				.getOffers()
+				.stream()
 				.collect(Collectors.toMap(Offer::getOfferId, offer -> offer));
 
 		// Clear the list (but don't let orphanRemoval trigger yet)
@@ -190,7 +198,9 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	@Transactional(readOnly = true)
 	public ProductDto getById(int productId) throws ProductNotFoundException {
-		return productRepository.findById(productId).map(productMapper::convertToProductDto)
+		return productRepository
+				.findById(productId)
+				.map(productMapper::convertToProductDto)
 				.orElseThrow(() -> new ProductNotFoundException("Product with given ID not found"));
 	}
 
@@ -198,38 +208,50 @@ public class ProductServiceImpl implements IProductService {
 	public List<ProductDto> getByCategory(String category) throws ProductNotFoundException {
 		List<Product> products = productRepository.findByCategory(category);
 		return toDtoListIfEmptyThrow(products,
-				() -> new ProductNotFoundException("Products with category: '" + category + "' not found"));
+				() -> new ProductNotFoundException(String.format("Products with category: %s - Not Found", category)));
 	}
 
 	@Override
 	public List<ProductDto> getByBrandAndPayType(String brand, Payment paymentType) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = productRepository.findByBrandAndPayType(brand, paymentType.name());
+		return toDtoListIfEmptyThrow(products,
+				() -> new ProductNotFoundException(
+						String.format("Products with brand: %s and paymentType: %s - Not Found", brand, paymentType)));
 	}
 
 	@Override
 	public List<ProductDto> getByColor(String color) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = productRepository.findByColor(color);
+		return toDtoListIfEmptyThrow(products,
+				() -> new ProductNotFoundException(
+						String.format("Products with color: %s - Not Found", color)));
 	}
 
 	@Override
 	public List<ProductDto> getByCategoryAndDelivery(String category, Delivery delivery)
 			throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = productRepository.findByCategoryAndDelivery(category, delivery.name());
+		return toDtoListIfEmptyThrow(products,
+				() -> new ProductNotFoundException(
+						String
+								.format("Products with category: %s and deliveryType: %s - Not Found", category,
+										delivery)));
 	}
 
 	@Override
 	public List<ProductDto> getByNameContains(String name) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = productRepository.findByNameContains(name);
+		return toDtoListIfEmptyThrow(products,
+				() -> new ProductNotFoundException(
+						String.format("Products with name containing: %s - Not Found", name)));
 	}
 
 	@Override
 	public List<ProductDto> getByNameAndOfferType(String name, OfferType offerType) throws ProductNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = productRepository.findByNameAndOfferType(name, offerType.getOfferName());
+		return toDtoListIfEmptyThrow(products,
+				() -> new ProductNotFoundException(
+						String.format("Products with name: %s and offerType: %s - Not Found", name, offerType)));
 	}
 
 	private <X extends RuntimeException> List<ProductDto> toDtoListIfEmptyThrow(List<Product> products,

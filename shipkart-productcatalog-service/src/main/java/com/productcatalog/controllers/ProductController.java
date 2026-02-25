@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 // See: https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/application-context-services.html#refresh-scope
 @RefreshScope
 @RequiredArgsConstructor
-@RequestMapping("/product-api/v1")
+@RequestMapping("/catalog-service/v1")
 @RestController
 public class ProductController {
 
@@ -45,40 +45,41 @@ public class ProductController {
 	@Value("${message}")
 	private String message;
 
-	// http://localhost:8081/product-api/v1/show-message
+	// http://localhost:8081/catalog-service/v1/show-message
 	@GetMapping("/show-message")
 	public String showMessage() {
 		return message;
 	}
 
-	// http://localhost:8081/product-api/v1/show-courses
+	// http://localhost:8081/catalog-service/v1/show-courses
 	@GetMapping("/show-courses")
 	public List<String> showCourses() {
 		return courses.getCourses();
 	}
 
-	// POST http://localhost:8081/product-api/v1/products
-	@PostMapping("/products")
+	// POST http://localhost:8081/catalog-service/v1/admin/products
+	@PostMapping("/admin/products")
 	ResponseEntity<Void> addProduct(@RequestBody ProductDto productDto) {
 		productService.addProduct(productDto);
 		return ResponseEntity.status(HttpStatus.CREATED.value()).build();
 	}
 
-	// PUT http://localhost:8081/product-api/v1/products
-	@PutMapping("/products")
+	// PUT http://localhost:8081/catalog-service/v1/admin/products
+	@PutMapping("/admin/products")
 	ResponseEntity<Void> updateProduct(@RequestBody ProductDto productDto) {
+		// productService.updateProduct(productDto); // Expects all fields
 		productService.updateProductVerbose(productDto);
 		return ResponseEntity.accepted().build();
 	}
 
-	// DELETE http://localhost:8081/product-api/v1/products/productId/1
-	@DeleteMapping("/products/productId/{productId}")
+	// DELETE http://localhost:8081/catalog-service/v1/admin/products/productId/1
+	@DeleteMapping("/admin/products/productId/{productId}")
 	ResponseEntity<Void> deleteProduct(@PathVariable int productId) {
 		productService.deleteProduct(productId);
 		return ResponseEntity.ok().build();
 	}
 
-	// GET http://localhost:8081/product-api/v1/products/productId/1
+	// GET http://localhost:8081/catalog-service/v1/products/productId/1
 	@GetMapping("/products/productId/{productId}")
 	ResponseEntity<ProductDto> getById(@PathVariable int productId) throws ProductNotFoundException {
 		ProductDto productDto = productService.getById(productId);
@@ -88,7 +89,7 @@ public class ProductController {
 		return new ResponseEntity<>(productDto, headers, HttpStatusCode.valueOf(200));
 	}
 
-	// GET http://localhost:8081/product-api/v1/products
+	// GET http://localhost:8081/catalog-service/v1/products
 	@GetMapping("/products")
 	ResponseEntity<List<ProductDto>> getAll() {
 		List<ProductDto> products = productService.getAll();
@@ -99,31 +100,53 @@ public class ProductController {
 	}
 
 	// GET
-	// http://localhost:8081/product-api/v1/products/category?categoryname=sports
+	// http://localhost:8081/catalog-service/v1/products/category?categoryname=sports
 	@GetMapping("/products/category")
 	ResponseEntity<List<ProductDto>> getByCategory(@RequestParam String categoryname) {
 		List<ProductDto> products = productService.getByCategory(categoryname);
 		return ResponseEntity.ok(products);
 	}
 
-	ResponseEntity<List<ProductDto>> getByBrandAndPayType(String brand, Payment paymentType) {
-		return null;
+	// GET
+	// http://localhost:8081/catalog-service/v1/products/brand/Samsung/payment/UPI
+	@GetMapping("/products/brand/{brand}/payment/{payment}")
+	ResponseEntity<List<ProductDto>> getByBrandAndPayType(@PathVariable String brand,
+			@PathVariable("payment") Payment paymentType) {
+		List<ProductDto> products = productService.getByBrandAndPayType(brand, paymentType);
+		return ResponseEntity.ok(products);
 	}
 
-	ResponseEntity<List<ProductDto>> getByColor(String color) {
-		return null;
+	// GET
+	// http://localhost:8081/catalog-service/v1/products/color/Thunderstorm%20Violet
+	@GetMapping("/products/color/{color}")
+	ResponseEntity<List<ProductDto>> getByColor(@PathVariable String color) {
+		List<ProductDto> products = productService.getByColor(color);
+		return ResponseEntity.ok(products);
 	}
 
-	ResponseEntity<List<ProductDto>> getByCategoryAndDelivery(String category, Delivery delivery) {
-		return null;
+	// GET
+	// http://localhost:8081/catalog-service/v1/products/category/Sports/delivery/STANDARD
+	@GetMapping("/products/category/{category}/delivery/{delivery}")
+	ResponseEntity<List<ProductDto>> getByCategoryAndDelivery(@PathVariable String category,
+			@PathVariable Delivery delivery) {
+		List<ProductDto> products = productService.getByCategoryAndDelivery(category, delivery);
+		return ResponseEntity.ok(products);
 	}
 
-	ResponseEntity<List<ProductDto>> getByNameContains(String name) {
-		return null;
+	// GET http://localhost:8081/catalog-service/v1/products/name/ball
+	@GetMapping("/products/name/{name}")
+	ResponseEntity<List<ProductDto>> getByNameContains(@PathVariable("name") String partialName) {
+		List<ProductDto> products = productService.getByNameContains(partialName);
+		return ResponseEntity.ok(products);
 	}
 
-	ResponseEntity<List<ProductDto>> getByNameAndOfferType(String name, OfferType offerType) {
-		return null;
+	// GET
+	// http://localhost:8081/catalog-service/v1/products/name/ball/offer/BANK%20OFFER
+	@GetMapping("/products/name/{name}/offer/{offer}")
+	ResponseEntity<List<ProductDto>> getByNameAndOfferType(@PathVariable("name") String partialName,
+			@PathVariable("offer") OfferType offerType) {
+		List<ProductDto> products = productService.getByNameAndOfferType(partialName, offerType);
+		return ResponseEntity.ok(products);
 	}
 
 }
