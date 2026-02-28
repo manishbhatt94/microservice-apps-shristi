@@ -2,6 +2,8 @@ package com.productinfo.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +16,14 @@ import com.productinfo.model.enums.OfferType;
 import com.productinfo.model.enums.Payment;
 import com.productinfo.service.IProductInfoService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/info-service/v1")
-@RequiredArgsConstructor
 public class ProductInfoController {
 
-	private final IProductInfoService productInfoService;
+	// @Qualifier("productInfoServiceRestClientImpl")
+	@Qualifier("productInfoServiceFeignClientImpl")
+	@Autowired
+	private IProductInfoService productInfoService;
 
 	// GET http://localhost:8082/info-service/v1/products/productId/1
 	@GetMapping("/products/productId/{productId}")

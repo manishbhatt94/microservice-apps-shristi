@@ -12,7 +12,7 @@
 	<artifactId>shipkart-productinfo-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>shipkart-productinfo-service</name>
-	<description>App that fetches product data from product-catalog service via Inter-Service Comm like using RestClient</description>
+	<description>App that fetches product data from product-catalog service via Inter-Service Comm like using RestClient (and also FeignClient as alternative to it)</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -43,11 +43,20 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
