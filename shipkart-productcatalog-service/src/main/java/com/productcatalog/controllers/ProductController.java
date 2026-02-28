@@ -29,7 +29,7 @@ import com.productcatalog.web.ICourses;
 
 import lombok.RequiredArgsConstructor;
 
-// Beans annotated with RefreshScope are lazily refreshed when we hit the actuator refresh endpoint
+// Beans annotated with RefreshScope are lazily refreshed when we hit the actuator refresh end-point
 // i.e. POST /actuator/refresh
 // See: https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/application-context-services.html#refresh-scope
 @RefreshScope
