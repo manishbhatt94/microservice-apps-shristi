@@ -16,13 +16,13 @@ import com.productinfo.model.enums.Payment;
 import com.productinfo.service.IProductInfoService;
 
 @Service
-public class ProductInfoServiceImpl implements IProductInfoService {
+public class ProductInfoServiceRestClientImpl implements IProductInfoService {
 
 	private final RestClient restClient;
 
 	// Use @Qualifier to specify the LoadBalanced version
-	public ProductInfoServiceImpl(@Qualifier("loadBalancedRestClientBuilder") RestClient.Builder builder) {
-		// Now 'builder' is the one with the LoadBalancer interceptor.
+	public ProductInfoServiceRestClientImpl(@Qualifier("loadBalancedRestClientBuilder") RestClient.Builder builder) {
+		// Now 'builder' is the one with the LoadBalancer intercepter.
 		// The service name 'product-catalog' is used as the base URL.
 		this.restClient = builder.baseUrl("http://product-catalog/catalog-service/v1").build();
 	}
