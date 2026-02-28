@@ -2,7 +2,12 @@ package com.productinfo.service.impl;
 
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,12 @@ import com.productinfo.service.IProductInfoService;
 @Service
 public class ProductInfoServiceRestClientImpl implements IProductInfoService {
 
+	@Autowired
+	private LoadBalancerClient loadBalancerClient;
+
+	@Autowired
+	private DiscoveryClient discoveryClient;
+
 	private final RestClient restClient;
 
 	// Use @Qualifier to specify the LoadBalanced version
@@ -29,22 +40,28 @@ public class ProductInfoServiceRestClientImpl implements IProductInfoService {
 
 	@Override
 	public Product getById(int productId) throws ProductNotFoundException {
-		return restClient
+		@Nullable
+		Product product = restClient
 				.get()
 				.uri("/products/productId/{productId}", productId)
 				.retrieve()
 				.body(Product.class);
+		logInstanceInfo_DiscoveryClient();
+		return product;
 	}
 
 	@Override
 	public List<Product> getAll() {
 		ParameterizedTypeReference<List<Product>> bodyType = new ParameterizedTypeReference<List<Product>>() {
 		};
-		return restClient
+		@Nullable
+		List<Product> products = restClient
 				.get()
 				.uri("/products")
 				.retrieve()
 				.body(bodyType);
+		logInstanceInfo_LoadBalancerClient();
+		return products;
 	}
 
 	@Override
@@ -117,6 +134,30 @@ public class ProductInfoServiceRestClientImpl implements IProductInfoService {
 				.retrieve()
 				.toEntity(bodyType);
 		return response.getBody();
+	}
+
+	private void logInstanceInfo_DiscoveryClient() {
+		List<ServiceInstance> serviceInstances = discoveryClient.getInstances("product-catalog");
+		serviceInstances.forEach(instance -> {
+			System.out.println(".........details..........");
+			System.out.println("port " + instance.getPort());
+			System.out.println("scheme " + instance.getScheme());
+			System.out.println("serviceId " + instance.getServiceId());
+			System.out.println("instanceId " + instance.getInstanceId());
+			System.out.println("host " + instance.getHost());
+			System.out.println("metadata " + instance.getMetadata());
+		});
+	}
+
+	private void logInstanceInfo_LoadBalancerClient() {
+		ServiceInstance instance = loadBalancerClient.choose("product-catalog");
+		System.out.println(".........details..........");
+		System.out.println("port " + instance.getPort());
+		System.out.println("scheme " + instance.getScheme());
+		System.out.println("serviceId" + instance.getServiceId());
+		System.out.println("instanceId " + instance.getInstanceId());
+		System.out.println("host " + instance.getHost());
+		System.out.println("metadata " + instance.getMetadata());
 	}
 
 }
