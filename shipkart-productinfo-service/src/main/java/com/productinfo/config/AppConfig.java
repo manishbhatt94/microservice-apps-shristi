@@ -9,6 +9,13 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class AppConfig {
 
+	// Spring Cloud auto-configures Eureka to use RestClient for its HTTP
+	// communication.
+	// When it finds a RestClient.Builder bean in the context, it uses it —
+	// but if that bean is @LoadBalanced, every HTTP call
+	// including http://localhost:8761/eureka gets routed through the load balancer,
+	// which looks up localhost as a service name in Eureka — which doesn't exist.
+
 	// 1. Eureka-Client and External APIs use this RestClient.Builder bean
 	// (No Load Balancing) using standard DNS.
 	// Marked as Primary so that Eureka-Client picks up this RestClient.Builder bean
