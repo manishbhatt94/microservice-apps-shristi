@@ -23,34 +23,34 @@ import com.productcatalog.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/product-api/v1")
+@RequestMapping("/catalog-service/v1")
 @RestController
 public class CategoryController {
 
 	private final ICategoryService categoryService;
 
-	// POST http://localhost:8081/product-api/v1/categories
-	@PostMapping("/categories")
+	// POST http://localhost:8081/catalog-service/v1/admin/categories
+	@PostMapping("/admin/categories")
 	ResponseEntity<Void> addCategory(@RequestBody CategoryDto categoryDto) {
 		categoryService.addCategory(categoryDto);
 		return ResponseEntity.status(HttpStatus.CREATED.value()).build();
 	}
 
-	// PUT http://localhost:8081/product-api/v1/categories
-	@PutMapping("/categories")
+	// PUT http://localhost:8081/catalog-service/v1/admin/categories
+	@PutMapping("/admin/categories")
 	ResponseEntity<Void> updateCategory(@RequestBody CategoryDto categoryDto) {
 		categoryService.updateCategory(categoryDto);
 		return ResponseEntity.accepted().build();
 	}
 
-	// DELETE http://localhost:8081/product-api/v1/categories/categoryId/1
-	@DeleteMapping("/categories/categoryId/{categoryId}")
+	// DELETE http://localhost:8081/catalog-service/v1/admin/categories/categoryId/1
+	@DeleteMapping("/admin/categories/categoryId/{categoryId}")
 	ResponseEntity<Void> deleteCategory(@PathVariable int categoryId) {
 		categoryService.deleteCategory(categoryId);
 		return ResponseEntity.ok().build();
 	}
 
-	// GET http://localhost:8081/product-api/v1/categories/categoryId/1
+	// GET http://localhost:8081/catalog-service/v1/categories/categoryId/1
 	@GetMapping("/categories/categoryId/{categoryId}")
 	ResponseEntity<CategoryDto> getById(@PathVariable int categoryId) throws CategoryNotFoundException {
 		CategoryDto categoryDto = categoryService.getById(categoryId);
@@ -60,7 +60,7 @@ public class CategoryController {
 		return new ResponseEntity<>(categoryDto, headers, HttpStatusCode.valueOf(200));
 	}
 
-	// GET http://localhost:8081/product-api/v1/categories
+	// GET http://localhost:8081/catalog-service/v1/categories
 	@GetMapping("/categories")
 	ResponseEntity<List<CategoryDto>> getAll() {
 		List<CategoryDto> categories = categoryService.getAll();

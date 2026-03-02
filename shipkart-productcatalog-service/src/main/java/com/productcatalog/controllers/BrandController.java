@@ -23,34 +23,34 @@ import com.productcatalog.service.IBrandService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/product-api/v1")
+@RequestMapping("/catalog-service/v1")
 @RestController
 public class BrandController {
 
 	private final IBrandService brandService;
 
-	// POST http://localhost:8081/product-api/v1/brands
-	@PostMapping("/brands")
+	// POST http://localhost:8081/catalog-service/v1/admin/brands
+	@PostMapping("/admin/brands")
 	ResponseEntity<Void> addBrand(@RequestBody BrandDto brandDto) {
 		brandService.addBrand(brandDto);
 		return ResponseEntity.status(HttpStatus.CREATED.value()).build();
 	}
 
-	// PUT http://localhost:8081/product-api/v1/brands
-	@PutMapping("/brands")
+	// PUT http://localhost:8081/catalog-service/v1/admin/brands
+	@PutMapping("/admin/brands")
 	ResponseEntity<Void> updateBrand(@RequestBody BrandDto brandDto) {
 		brandService.updateBrand(brandDto);
 		return ResponseEntity.accepted().build();
 	}
 
-	// DELETE http://localhost:8081/product-api/v1/brands/brandId/1
-	@DeleteMapping("/brands/brandId/{brandId}")
+	// DELETE http://localhost:8081/catalog-service/v1/admin/brands/brandId/1
+	@DeleteMapping("/admin/brands/brandId/{brandId}")
 	ResponseEntity<Void> deleteBrand(@PathVariable int brandId) {
 		brandService.deleteBrand(brandId);
 		return ResponseEntity.ok().build();
 	}
 
-	// GET http://localhost:8081/product-api/v1/brands/brandId/1
+	// GET http://localhost:8081/catalog-service/v1/brands/brandId/1
 	@GetMapping("/brands/brandId/{brandId}")
 	ResponseEntity<BrandDto> getById(@PathVariable int brandId) throws BrandNotFoundException {
 		BrandDto brandDto = brandService.getById(brandId);
@@ -60,7 +60,7 @@ public class BrandController {
 		return new ResponseEntity<>(brandDto, headers, HttpStatusCode.valueOf(200));
 	}
 
-	// GET http://localhost:8081/product-api/v1/brands
+	// GET http://localhost:8081/catalog-service/v1/brands
 	@GetMapping("/brands")
 	ResponseEntity<List<BrandDto>> getAll() {
 		List<BrandDto> brands = brandService.getAll();
