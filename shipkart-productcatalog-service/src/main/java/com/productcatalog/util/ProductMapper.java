@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.productcatalog.model.dtos.BrandDto;
 import com.productcatalog.model.dtos.CategoryDto;
+import com.productcatalog.model.dtos.CreateProductDto;
 import com.productcatalog.model.dtos.ProductDto;
 import com.productcatalog.model.entities.Brand;
 import com.productcatalog.model.entities.Category;
@@ -23,6 +24,10 @@ public class ProductMapper {
 
 	public Product convertToProductEntity(ProductDto productDto) {
 		return mapper.map(productDto, Product.class);
+	}
+
+	public Product convertToProductEntity(CreateProductDto createProductDto) {
+		return mapper.map(createProductDto, Product.class);
 	}
 
 	public CategoryDto convertToCategoryDto(Category category) {

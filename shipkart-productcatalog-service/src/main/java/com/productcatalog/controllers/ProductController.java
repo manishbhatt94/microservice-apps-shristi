@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.productcatalog.exception.ProductNotFoundException;
+import com.productcatalog.model.dtos.CreateProductDto;
 import com.productcatalog.model.dtos.ProductDto;
 import com.productcatalog.model.enums.Delivery;
 import com.productcatalog.model.enums.OfferType;
@@ -59,7 +60,7 @@ public class ProductController {
 
 	// POST http://localhost:8081/catalog-service/v1/admin/products
 	@PostMapping("/admin/products")
-	ResponseEntity<Void> addProduct(@RequestBody ProductDto productDto) {
+	ResponseEntity<Void> addProduct(@RequestBody CreateProductDto productDto) {
 		productService.addProduct(productDto);
 		return ResponseEntity.status(HttpStatus.CREATED.value()).build();
 	}

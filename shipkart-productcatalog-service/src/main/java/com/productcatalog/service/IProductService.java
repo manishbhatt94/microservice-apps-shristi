@@ -3,6 +3,7 @@ package com.productcatalog.service;
 import java.util.List;
 
 import com.productcatalog.exception.ProductNotFoundException;
+import com.productcatalog.model.dtos.CreateProductDto;
 import com.productcatalog.model.dtos.ProductDto;
 import com.productcatalog.model.enums.Delivery;
 import com.productcatalog.model.enums.OfferType;
@@ -12,7 +13,7 @@ public interface IProductService {
 
 	// CRUD operations:
 
-	void addProduct(ProductDto productDto);
+	void addProduct(CreateProductDto productDto);
 
 	void updateProduct(ProductDto productDto);
 
