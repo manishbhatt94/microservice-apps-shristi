@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.productcatalog.exception.BrandNotFoundException;
 import com.productcatalog.exception.CategoryNotFoundException;
 import com.productcatalog.exception.ProductNotFoundException;
+import com.productcatalog.feign.IProductInventoryFeignClient;
 import com.productcatalog.model.dtos.CategoryDto;
+import com.productcatalog.model.dtos.CreateProductDto;
 import com.productcatalog.model.dtos.FeatureDto;
 import com.productcatalog.model.dtos.OfferDto;
 import com.productcatalog.model.dtos.ProductDto;
@@ -39,12 +41,15 @@ public class ProductServiceImpl implements IProductService {
 	private final IProductRepository productRepository;
 	private final ICategoryRepository categoryRepository;
 	private final IBrandRepository brandRepository;
+	private final IProductInventoryFeignClient inventoryClient;
 	private final ProductMapper productMapper;
 
 	@Override
-	public void addProduct(ProductDto productDto) {
-		Product product = productMapper.convertToProductEntity(productDto);
-		productRepository.save(product);
+	public void addProduct(CreateProductDto createProductDto) {
+		Product product = productMapper.convertToProductEntity(createProductDto);
+		Product savedProduct = productRepository.save(product);
+		String status = inventoryClient.addStock(savedProduct.getProductId(), createProductDto.getStock());
+		System.out.println("inventory addStock status = " + status);
 	}
 
 	@Override
