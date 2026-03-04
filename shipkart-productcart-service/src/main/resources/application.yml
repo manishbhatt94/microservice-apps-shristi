@@ -24,6 +24,11 @@ server:
     port: 8084
 
 management:
+    health:
+        defaults:
+            enabled: true
+        circuitbreakers:
+            enabled: true
     endpoints:
         web:
             exposure:
@@ -32,3 +37,17 @@ management:
     endpoint:
         health:
             show-details: always
+            show-components: always
+        circuitbreakers:
+            enabled: true
+
+resilience4j.circuitbreaker:
+    instances:
+        cartService:
+            registerHealthIndicator: true
+            # Add these for easier testing:
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            failureRateThreshold: 50
+            waitDurationInOpenState: 10s
+            permittedNumberOfCallsInHalfOpenState: 2

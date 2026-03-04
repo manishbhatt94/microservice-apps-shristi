@@ -23,9 +23,10 @@ public class CartController {
 	// POST
 	// http://localhost:8084/cart-service/v1/cart/add?userId=1&productId=1&quantity=2
 	@PostMapping("/cart/add")
-	ResponseEntity<Void> addToCart(@RequestParam int userId, @RequestParam int productId, @RequestParam int quantity) {
-		cartService.addToCart(userId, productId, quantity);
-		return ResponseEntity.ok().build();
+	ResponseEntity<CartDto> addToCart(@RequestParam int userId, @RequestParam int productId,
+			@RequestParam int quantity) {
+		CartDto cartDto = cartService.addToCart(userId, productId, quantity);
+		return ResponseEntity.ok().body(cartDto);
 	}
 
 	// GET

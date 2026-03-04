@@ -15,6 +15,7 @@ import com.productcart.repository.ICartRepository;
 import com.productcart.service.ICartService;
 import com.productcart.util.CartMapper;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,7 +30,8 @@ public class CartServiceImpl implements ICartService {
 	private final CartMapper mapper;
 
 	@Override
-	public void addToCart(int userId, int productId, int quantity) {
+	@CircuitBreaker(name = "cartService", fallbackMethod = "addToCartFallback")
+	public CartDto addToCart(int userId, int productId, int quantity) {
 		// 1. FAIL FAST: Validate product existence first
 		// If this throws an exception (404), the method stops here.
 		Product product = infoClient.viewById(productId);
@@ -64,7 +66,13 @@ public class CartServiceImpl implements ICartService {
 
 		// 4. Update Totals and Save
 		cart.setTotalPrice(computeCartTotalPrice(cart.getCartItems()));
-		repository.save(cart);
+		Cart savedCart = repository.save(cart);
+		return mapper.toCartDto(savedCart);
+	}
+
+	public CartDto addToCartFallback(int userId, int productId, int quantity, Exception e) {
+		System.out.println("addToCartFallback - Received Exception: " + e);
+		return new CartDto();
 	}
 
 	@Override
