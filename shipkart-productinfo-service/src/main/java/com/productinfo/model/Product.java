@@ -1,5 +1,6 @@
 package com.productinfo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -28,14 +29,14 @@ public class Product {
 
 	private Feature feature;
 
-	private List<Offer> offers;
+	private List<Offer> offers = new ArrayList<>();
 
-	private List<Category> categories;
+	private List<Category> categories = new ArrayList<>();
 
 	private Brand brand;
 
-	private List<String> deliveryTypes; // PRIME, STANDARD, AMAZON
+	private List<String> deliveryTypes = new ArrayList<>(); // PRIME, STANDARD, AMAZON
 
-	private List<String> paymentModes; // CARD, UPI, NB, COD
+	private List<String> paymentModes = new ArrayList<>(); // CARD, UPI, NB, COD
 
 }

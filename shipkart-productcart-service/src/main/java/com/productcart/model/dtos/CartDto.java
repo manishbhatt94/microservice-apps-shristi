@@ -1,5 +1,6 @@
 package com.productcart.model.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class CartDto {
 
 	private Integer userId;
 
-	private List<CartItemDto> cartItems;
+	private List<CartItemDto> cartItems = new ArrayList<>();
 
 	private double totalPrice;
 

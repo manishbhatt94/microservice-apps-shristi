@@ -47,6 +47,7 @@ public class ProductInfoServiceRestClientImpl implements IProductInfoService {
 				.retrieve()
 				.body(Product.class);
 		logInstanceInfo_DiscoveryClient();
+		// return product.toString();
 		return product;
 	}
 

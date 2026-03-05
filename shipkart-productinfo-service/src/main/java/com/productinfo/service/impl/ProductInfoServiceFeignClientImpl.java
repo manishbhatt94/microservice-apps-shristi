@@ -21,6 +21,7 @@ public class ProductInfoServiceFeignClientImpl implements IProductInfoService {
 
 	@Override
 	public Product getById(int productId) throws ProductNotFoundException {
+		// return feignClient.readById(productId).toString();
 		return feignClient.readById(productId);
 	}
 

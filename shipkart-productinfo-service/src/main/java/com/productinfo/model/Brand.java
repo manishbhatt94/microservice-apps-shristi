@@ -1,5 +1,6 @@
 package com.productinfo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,6 +26,6 @@ public class Brand {
 	private String brandName;
 
 	@JsonIgnore
-	private List<Product> products;
+	private List<Product> products = new ArrayList<>();
 
 }

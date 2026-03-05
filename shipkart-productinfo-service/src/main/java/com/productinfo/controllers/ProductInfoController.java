@@ -28,6 +28,7 @@ public class ProductInfoController {
 	// GET http://localhost:8082/info-service/v1/products/productId/1
 	@GetMapping("/products/productId/{productId}")
 	ResponseEntity<Product> viewById(@PathVariable int productId) {
+		// String product = productInfoService.getById(productId);
 		Product product = productInfoService.getById(productId);
 		return ResponseEntity.ok(product);
 	}
