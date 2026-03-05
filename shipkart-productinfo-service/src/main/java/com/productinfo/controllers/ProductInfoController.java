@@ -21,7 +21,8 @@ import com.productinfo.service.IProductInfoService;
 public class ProductInfoController {
 
 	// @Qualifier("productInfoServiceRestClientImpl")
-	@Qualifier("productInfoServiceFeignClientImpl")
+	// @Qualifier("productInfoServiceFeignClientImpl")
+	@Qualifier("productInfoServiceRCResilienceImpl")
 	@Autowired
 	private IProductInfoService productInfoService;
 
