@@ -6,6 +6,9 @@ spring:
             server:
                 git:
                     uri: https://github.com/manishbhatt94/microservices-config-source-shristi
+                    default-label: eureka-based
+                    clone-on-start: true
+                    basedir: ${java.io.tmpdir}/spring-config-src/microservices-config-source-shristi/eureka-based
 
 server:
     port: 8888
